@@ -8,8 +8,6 @@ from hyde_manager.app.base import NOT_SET
 
 
 class BooleanModal(ModalScreen[bool | object]):
-    """Styled modal that matches the screenshot"""
-
     BINDINGS = [
         Binding("escape", "close", "Close"),
         Binding("left,right", "navigate", "Navigate"),

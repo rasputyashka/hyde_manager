@@ -7,12 +7,12 @@ from hyde_manager.app.options import (
     OneOfOption,
     SeveralOfOption,
 )
+from hyde_manager.app.screens.boolean_modal import BooleanModal
 from hyde_manager.app.widgets.sidebar_step_menu import SidebarStepMenu
 from hyde_manager.app.screens.config_modal import ConfigModal
 
 CONFIG = """
-[project]
-version = "12"
+[hyde]
 """
 
 
@@ -39,7 +39,7 @@ class Installer(AppContainer):
                 "Install App",
                 "Start installation",
                 app=self.app,
-                action=lambda x: x,
+                action=self.show_confirmation_window,
             ),
             ButtonAsOption(
                 "Show config",
@@ -55,3 +55,17 @@ class Installer(AppContainer):
     def show_config(self):
         config_modal = ConfigModal(CONFIG)
         self.app.push_screen(config_modal)  # pass config screen
+
+    def show_confirmation_window(self):
+        confirmation_window = BooleanModal("Start installation?")
+
+        def handle_confirmation_window_close(value):
+            if value:
+                self.run_installation()
+
+        self.app.push_screen(
+            confirmation_window, handle_confirmation_window_close
+        )
+
+    def run_installation(self):
+        pass
