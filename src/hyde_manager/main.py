@@ -12,7 +12,7 @@ def get_app(option) -> Application:
 
 def main(option):
     app = get_app(option)
-    app.run()
+    app.run(mouse=False)
 
 
 if __name__ == "__main__":

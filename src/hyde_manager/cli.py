@@ -21,4 +21,4 @@ def main():
     option = sys.argv[1]
     app = get_app(option)
 
-    app.run()
+    app.run(mouse=False)

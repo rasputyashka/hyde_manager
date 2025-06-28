@@ -1,25 +1,26 @@
-from textual.app import ComposeResult
-from textual.binding import Binding
-from textual.containers import Container, Horizontal
-from textual.screen import ModalScreen
-from textual.widgets import (
-    Button,
-    Input,
-    Label,
-    ListItem,
-    ListView,
-)
-from textual.app import App
+from abc import ABC, abstractmethod
+from typing import TypeVar
 from textual.app import ComposeResult
 from textual.containers import Container
+from textual.app import App
 from textual.widgets import Header, Footer, Static
 
+from hyde_manager.app.widgets.options import BaseOptionWidget
 
-NOT_SET = object()  # sentinel object
+
+ValueT = TypeVar("ValueT")
+
+
+class Sentinel:
+    def __repr__(self) -> str:
+        return "Sentinel object"
+
+
+NOT_SET = Sentinel()  # sentinel object
 
 
 class AppContainer(Container):
-    """Base class for all containers/
+    """Base class for all containers.
 
     Container is a widget that holds widgets with options and options info.
     """
@@ -32,15 +33,6 @@ class Application(App):
     .m-1 { margin: 1 }
     .m-2 { margin: 2 }
 
-    .options-container {
-        height: 100%;
-        width: 1fr;
-    }
-    .option-info {
-        height: 100%;
-        width: 3fr;
-    }
-
     .welcome-text {
         text-align: center;
     }
@@ -49,27 +41,38 @@ class Application(App):
         layout: horizontal;
     }
 
-    .options-list {
-        height: 100%;
-        width: 1fr;
-        border: solid $primary;
-        background: rgba(0,0,0,0);
-    }
-    .option-info {
-        height: 100%;
-        width: 3fr;
-        border: solid $primary;
-    }
     """
+
+    TITLE = "HyDE Manager"
 
     def __init__(
         self, app_container_class: type[AppContainer], *args, **kwargs
     ):
         super().__init__(*args, **kwargs)
         self.app_container_class = app_container_class
+        self.capture_mouse(None)
 
     def compose(self) -> ComposeResult:
         yield Header(classes="header")
         yield Static("Welcome to HyDE manager", classes="welcome-text m-1")
         yield self.app_container_class(classes="app-container")
         yield Footer()
+
+
+class Option:
+    def __init__(self, name: str, description):
+        self.name = name
+        self.description = description
+
+
+class Selectable(ABC):
+    @abstractmethod
+    def on_select(self): ...
+
+    @abstractmethod
+    def get_widget(self) -> BaseOptionWidget:
+        pass
+
+
+class SelectableOption(Option, Selectable):
+    pass
