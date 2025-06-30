@@ -1,0 +1,24 @@
+options:
+  - name: 'Nvidia Detection'
+    description: 'If this option is set, nvidia  drivers will be installed automatically'
+    type: 'boolean'
+    default: True
+
+  - name: 'Use chaotic aur'
+    description: 'Chaotic aur has prebuild binaries'
+    type: 'boolean'
+    default: False
+
+  - name: 'AUR helper'
+    description: 'Choose default aur helper'
+    type: "oneOf"
+    default: 'yay'
+    chooses:
+      - name: 'yay'
+        description: "yay is a ..."
+      - name: 'yay-git'
+        description: "yay-git is a ..."
+      - name: 'peru'
+        description: "peru is a ..."
+      - name: 'peru-git'
+        description: "peru-git is a ..."
